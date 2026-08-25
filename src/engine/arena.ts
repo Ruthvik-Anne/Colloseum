@@ -24,10 +24,12 @@ import {
   randomClaimStatement,
 } from "./content";
 
-let uidCounter = 0;
 function uid(prefix: string) {
-  uidCounter += 1;
-  return `${prefix}-${uidCounter.toString(36)}`;
+  const id =
+    typeof crypto !== "undefined" && "randomUUID" in crypto
+      ? crypto.randomUUID().replace(/-/g, "").slice(0, 12)
+      : `${Date.now().toString(36)}${Math.random().toString(36).slice(2, 8)}`;
+  return `${prefix}-${id}`;
 }
 
 function shuffle<T>(arr: T[]): T[] {
@@ -195,7 +197,14 @@ export function stepArena(run: ArenaRun) {
     return;
   }
 
-  const attacker = pick(alive);
+  const eligibleAttackers = alive.filter((f) => f.budget.majorAttacks > 0 || f.budget.minorAttacks > 0);
+  if (eligibleAttackers.length === 0) {
+    log(run, { kind: "referee", text: "All fighters have exhausted their combat budgets.", highlight: true });
+    concludeArena(run);
+    return;
+  }
+
+  const attacker = pick(eligibleAttackers);
   const defendersPool = alive.filter((f) => f.id !== attacker.id);
   if (defendersPool.length === 0) {
     concludeArena(run);
@@ -214,7 +223,17 @@ export function stepArena(run: ArenaRun) {
 
   const targetClaim = pick(defenderClaims);
   const attackType: AttackType = pick(ATTACK_TYPES);
-  const useTool = attackType === "execution" || attackType === "experiment" || attackType === "calculation";
+  const wantsTool = attackType === "execution" || attackType === "experiment" || attackType === "calculation";
+  const useTool = wantsTool && attacker.budget.toolChallenges > 0;
+  if (useTool) attacker.budget.toolChallenges -= 1;
+
+  const severityOptions: Attack["severity"][] = [
+    ...(attacker.budget.majorAttacks > 0 ? (["major", "critical"] as const) : []),
+    ...(attacker.budget.minorAttacks > 0 ? (["minor"] as const) : []),
+  ];
+  const severity = pick(severityOptions);
+  if (severity === "minor") attacker.budget.minorAttacks -= 1;
+  else attacker.budget.majorAttacks -= 1;
 
   attacker.status = "speaking";
   attacker.attacksLaunched += 1;
@@ -229,7 +248,7 @@ export function stepArena(run: ArenaRun) {
     targetClaimId: targetClaim.id,
     type: attackType,
     argument: attackArgument,
-    severity: pick(["minor", "major", "critical"] as const),
+    severity,
     status: "pending",
   };
   run.attacks.push(attack);
@@ -270,7 +289,11 @@ export function stepArena(run: ArenaRun) {
   defender.status = "computing";
   resolveAttack(run, attacker, defender, targetClaim, attack);
 
-  if (run.round < run.maxRounds && Math.random() < 0.18) {
+  if (useTool && attack.status === "landed") {
+    attacker.toolWins += 1;
+  }
+
+  if (run.round <= run.maxRounds && Math.random() < 0.18) {
     run.round += 1;
     log(run, { kind: "core", text: `Advancing to round ${run.round}.` });
   }
@@ -284,11 +307,13 @@ export function stepArena(run: ArenaRun) {
 }
 
 function resolveAttack(run: ArenaRun, attacker: Fighter, defender: Fighter, claim: Claim, attack: Attack) {
+  const canCounter = defender.budget.counterattacks > 0;
   const outcomeRoll = Math.random();
   let choice: "defend" | "concede" | "revise" | "counterattack";
   if (outcomeRoll < 0.45) choice = "defend";
   else if (outcomeRoll < 0.68) choice = "revise";
-  else if (outcomeRoll < 0.85) choice = "counterattack";
+  else if (outcomeRoll < 0.85 && canCounter) choice = "counterattack";
+  else if (outcomeRoll < 0.85) choice = "defend";
   else choice = "concede";
 
   defender.status = "speaking";
@@ -323,6 +348,7 @@ function resolveAttack(run: ArenaRun, attacker: Fighter, defender: Fighter, clai
     defender.health = Math.max(0, defender.health - 4);
     log(run, { kind: "agent", actor: defender.name, text: `${defender.name} ${line}` });
   } else {
+    defender.budget.counterattacks -= 1;
     attack.status = "defended";
     claim.status = "disputed";
     defender.defensesWon += 1;
@@ -382,7 +408,9 @@ function concludeArena(run: ArenaRun) {
       ? `${run.fighters.find((f) => f.id === strongestAttack.attackerId)?.name ?? "?"} — ${strongestAttack.argument}`
       : "No critical attacks landed this run.",
     strongestDefense: strongestDefense
-      ? `${run.fighters.find((f) => f.id === strongestDefense.attackerId)?.name ?? "?"}'s target held under pressure.`
+      ? `${run.fighters.find((f) => f.id === strongestDefense.targetFighterId)?.name ?? "?"} held the line against ${
+          run.fighters.find((f) => f.id === strongestDefense.attackerId)?.name ?? "?"
+        }'s attack.`
       : "No decisive defenses recorded.",
   };
 
