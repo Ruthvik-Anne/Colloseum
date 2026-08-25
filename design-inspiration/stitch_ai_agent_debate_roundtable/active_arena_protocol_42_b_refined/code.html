@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Logic Arena - Active Combat Session</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+                "on-surface": "#181c20",
+                "on-secondary-fixed-variant": "#3d475d",
+                "on-secondary": "#ffffff",
+                "primary": "#004d60",
+                "tertiary-container": "#545e74",
+                "secondary-container": "#d8e2fe",
+                "on-tertiary-fixed": "#111b2e",
+                "surface-dim": "#d8dadf",
+                "on-tertiary-fixed-variant": "#3d475c",
+                "surface-container": "#eceef3",
+                "inverse-surface": "#2d3135",
+                "on-secondary-container": "#5a647c",
+                "surface-bright": "#f7f9fe",
+                "surface-container-lowest": "#ffffff",
+                "surface-lab": "#FFFFFF",
+                "on-primary-fixed-variant": "#004e60",
+                "secondary": "#545e75",
+                "background": "#f7f9fe",
+                "on-primary-fixed": "#001f28",
+                "surface-tint": "#00677f",
+                "tertiary": "#3c465b",
+                "surface-code": "#F1F4F9",
+                "inverse-primary": "#86d1ec",
+                "primary-container": "#00677f",
+                "primary-fixed": "#b6eaff",
+                "tertiary-fixed": "#d8e2fd",
+                "terminal-text": "#252F43",
+                "surface-container-highest": "#e0e2e7",
+                "surface-container-low": "#f1f4f9",
+                "secondary-fixed": "#d8e2fe",
+                "on-error-container": "#93000a",
+                "on-error": "#ffffff",
+                "inverse-on-surface": "#eff1f6",
+                "outline": "#6f787d",
+                "on-primary": "#ffffff",
+                "on-tertiary-container": "#ced8f2",
+                "on-primary-container": "#98e3ff",
+                "on-background": "#181c20",
+                "accent-cyan": "#00D1FF",
+                "surface-container-high": "#e6e8ed",
+                "deep-slate": "#1A2438",
+                "secondary-fixed-dim": "#bcc6e1",
+                "outline-variant": "#bfc8cd",
+                "on-tertiary": "#ffffff",
+                "surface": "#f7f9fe",
+                "on-secondary-fixed": "#111b2f",
+                "error": "#ba1a1a",
+                "primary-fixed-dim": "#86d1ec",
+                "tertiary-fixed-dim": "#bcc6e0",
+                "error-container": "#ffdad6",
+                "surface-variant": "#e0e2e7",
+                "on-surface-variant": "#3f484c"
+        },
+        "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+        },
+        "spacing": {
+                "margin-mobile": "16px",
+                "stack-lg": "24px",
+                "stack-md": "16px",
+                "panel-width-side": "360px",
+                "margin-desktop": "32px",
+                "stack-sm": "8px",
+                "unit": "4px",
+                "gutter": "16px"
+        },
+        "fontFamily": {
+                "headline-md": [
+                        "Inter"
+                ],
+                "headline-lg-mobile": [
+                        "Inter"
+                ],
+                "body-lg": [
+                        "Inter"
+                ],
+                "headline-lg": [
+                        "Inter"
+                ],
+                "body-md": [
+                        "Inter"
+                ],
+                "display-lg": [
+                        "Inter"
+                ],
+                "label-mono": [
+                        "JetBrains Mono"
+                ]
+        },
+        "fontSize": {
+                "headline-md": [
+                        "24px",
+                        {
+                                "lineHeight": "32px",
+                                "letterSpacing": "-0.01em",
+                                "fontWeight": "600"
+                        }
+                ],
+                "headline-lg-mobile": [
+                        "28px",
+                        {
+                                "lineHeight": "34px",
+                                "fontWeight": "700"
+                        }
+                ],
+                "body-lg": [
+                        "18px",
+                        {
+                                "lineHeight": "28px",
+                                "fontWeight": "400"
+                        }
+                ],
+                "headline-lg": [
+                        "32px",
+                        {
+                                "lineHeight": "40px",
+                                "letterSpacing": "-0.01em",
+                                "fontWeight": "700"
+                        }
+                ],
+                "body-md": [
+                        "16px",
+                        {
+                                "lineHeight": "24px",
+                                "fontWeight": "400"
+                        }
+                ],
+                "display-lg": [
+                        "48px",
+                        {
+                                "lineHeight": "56px",
+                                "letterSpacing": "-0.02em",
+                                "fontWeight": "700"
+                        }
+                ],
+                "label-mono": [
+                        "12px",
+                        {
+                                "lineHeight": "16px",
+                                "letterSpacing": "0.05em",
+                                "fontWeight": "500"
+                        }
+                ]
+        }
+},
+    },
+  }
+</script>
+<style>
+        /* Custom styles for arena positioning and animations */
+        .arena-container {
+            position: relative;
+            width: 100%;
+            height: 480px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-image: radial-gradient(circle at center, rgba(0, 209, 255, 0.05) 0%, transparent 60%),
+                              linear-gradient(to right, #e0e2e7 1px, transparent 1px),
+                              linear-gradient(to bottom, #e0e2e7 1px, transparent 1px);
+            background-size: 100% 100%, 48px 48px, 48px 48px;
+            background-position: center;
+        }
+        
+        .agent-node {
+            position: absolute;
+            transform: translate(-50%, -50%);
+            transition: all 0.3s ease;
+        }
+
+        /* Circular positioning calculation (Radius: ~180px) */
+        .agent-1 { top: 15%; left: 50%; }
+        .agent-2 { top: 40%; left: 85%; }
+        .agent-3 { top: 85%; left: 75%; }
+        .agent-4 { top: 85%; left: 25%; }
+        .agent-5 { top: 40%; left: 15%; }
+
+        .pulse-ring {
+            animation: pulse 2s infinite cubic-bezier(0.4, 0, 0.6, 1);
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0; }
+            100% { transform: scale(1); opacity: 0; }
+        }
+
+        .data-stream {
+            stroke-dasharray: 4 4;
+            animation: dash 20s linear infinite;
+        }
+
+        @keyframes dash {
+            to { stroke-dashoffset: -100; }
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md text-body-md overflow-hidden">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full z-50 bg-surface-lab border-b border-outline-variant h-16 flex justify-between items-center px-margin-desktop max-w-container-max mx-auto shadow-sm">
+<div class="flex items-center gap-stack-lg">
+<div class="font-headline-md text-headline-md font-bold text-deep-slate tracking-tight">ARENA</div>
+<nav class="hidden md:flex items-center gap-stack-lg font-label-mono text-label-mono h-full pt-1">
+<a class="text-primary-container border-b-2 border-primary-container pb-1 h-full flex items-center mt-1" href="#">ARENA</a>
+<a class="text-secondary hover:text-primary-container transition-colors duration-200 ease-in-out h-full flex items-center" href="#">LOGIC_GRAPH</a>
+<a class="text-secondary hover:text-primary-container transition-colors duration-200 ease-in-out h-full flex items-center" href="#">TERMINAL</a>
+<a class="text-secondary hover:text-primary-container transition-colors duration-200 ease-in-out h-full flex items-center" href="#">ARCHIVE</a>
+</nav>
+</div>
+<div class="flex items-center gap-stack-md">
+<button class="text-secondary hover:text-primary-container transition-colors p-stack-sm">
+<span class="material-symbols-outlined text-xl">settings</span>
+</button>
+<button class="text-secondary hover:text-primary-container transition-colors p-stack-sm">
+<span class="material-symbols-outlined text-xl">notifications</span>
+</button>
+<img alt="User Lab Profile" class="w-8 h-8 rounded-full border border-outline-variant object-cover ml-stack-sm" data-alt="A minimalist, high-contrast user avatar in a clinical lab style. The image features a stylized geometric face profile rendered in pristine white against a deep slate background, with subtle glowing cyan circuit lines acting as neural pathways. The aesthetic is highly technical, sterile, and professional, embodying a modern logic system." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD7mWTrEKfye-pV3EZCGowhNlljTJHgd1KdKNKpo-wyLN8tyxEMLxsIWSRpYQd7a-jxr2tFgGbvhDq4H_3xTDvIIilPGjkzWtGdPROh4u6_5erfPQhvD8y_BMzUT_BaTLxOMd5XHLbASUOsyE0t4E1hHIZ7p9Sfr4onleHqSQ4OiMHFCWCNG-MlsHSzUsU6DMBPa8BZWSJjAot3guVjDcBz4nvDx1REVYDSV0qmIBlNVtQW8xxqyZRO"/>
+</div>
+</header>
+<div class="flex h-screen pt-16">
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-16 h-[calc(100vh-64px)] w-64 bg-surface-container-low flex flex-col py-stack-md border-r border-outline-variant z-40">
+<div class="px-margin-desktop pb-stack-md mb-stack-md border-b border-outline-variant">
+<div class="flex items-center gap-stack-sm mb-unit">
+<img alt="System Status" class="w-6 h-6 rounded-DEFAULT object-cover" data-alt="A small, technical system status indicator graphic. It displays a perfect circle divided into quadrants, glowing softly in cyan against a stark white background. Thin, precise slate-colored grid lines intersect the circle, suggesting diagnostic measurement and calibration in a sterile lab environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCeESPKL7wgI6b7MFH-Zz3dkf06uciz7yJNtlJigFPwzEyU1P8YKLgIZq9Fnv5hH8Hbo2EM4GTAphzeaJMybOgFdQbrneG8JxmjTo7FjlHnyq7F3a8usHbqyU1ubAyHkzFe9_fChEIZ_iCAqoL4XP7QYtWNCZalE1WG-EAl-ydPu-VgLRYDE8hbS1l5NbLG5hV_HKDzYWFyiDZzWxYydT95tplFZ7Ruy-R1DStrKtTDFh_XDFPpo_--"/>
+<div class="font-headline-md text-headline-md text-primary-container font-semibold">LAB_SYS_01</div>
+</div>
+<div class="font-label-mono text-label-mono text-secondary ml-8">Active Session</div>
+<button class="mt-stack-md w-full bg-primary-container text-surface-lab font-label-mono text-label-mono py-stack-sm px-stack-md rounded-lg hover:bg-surface-tint transition-colors flex items-center justify-center gap-stack-sm">
+<span class="material-symbols-outlined text-sm">play_arrow</span>
+                    INITIALIZE_SCAN
+                </button>
+</div>
+<nav class="flex-1 overflow-y-auto">
+<a class="flex items-center gap-stack-md bg-surface-lab text-primary-container border-l-4 border-accent-cyan px-stack-md py-stack-sm font-label-mono text-label-mono" href="#">
+<span class="material-symbols-outlined">psychology</span>
+                    AGENTS
+                </a>
+<a class="flex items-center gap-stack-md text-secondary hover:bg-surface-variant transition-all scale-98 active:scale-95 px-stack-md py-stack-sm font-label-mono text-label-mono" href="#">
+<span class="material-symbols-outlined">description</span>
+                    CLAIMS
+                </a>
+<a class="flex items-center gap-stack-md text-secondary hover:bg-surface-variant transition-all scale-98 active:scale-95 px-stack-md py-stack-sm font-label-mono text-label-mono" href="#">
+<span class="material-symbols-outlined">fact_check</span>
+                    EVIDENCE
+                </a>
+<a class="flex items-center gap-stack-md text-secondary hover:bg-surface-variant transition-all scale-98 active:scale-95 px-stack-md py-stack-sm font-label-mono text-label-mono" href="#">
+<span class="material-symbols-outlined">account_tree</span>
+                    REASONING
+                </a>
+<a class="flex items-center gap-stack-md text-secondary hover:bg-surface-variant transition-all scale-98 active:scale-95 px-stack-md py-stack-sm font-label-mono text-label-mono" href="#">
+<span class="material-symbols-outlined">sensors</span>
+                    SENSORS
+                </a>
+</nav>
+<div class="mt-auto px-stack-sm pt-stack-md border-t border-outline-variant">
+<a class="flex items-center gap-stack-md text-secondary hover:bg-surface-variant transition-all px-stack-md py-stack-sm font-label-mono text-label-mono rounded-DEFAULT" href="#">
+<span class="material-symbols-outlined">settings</span>
+                    SETTINGS
+                </a>
+<a class="flex items-center gap-stack-md text-secondary hover:bg-surface-variant transition-all px-stack-md py-stack-sm font-label-mono text-label-mono rounded-DEFAULT" href="#">
+<span class="material-symbols-outlined">logout</span>
+                    LOGOUT
+                </a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="ml-64 flex-1 h-full overflow-y-auto bg-background p-margin-desktop flex flex-col gap-stack-lg max-w-container-max">
+<!-- Active Combat Arena (Roundtable) -->
+<section class="w-full bg-surface-lab border border-outline-variant rounded-lg shadow-sm overflow-hidden flex flex-col">
+<div class="px-stack-md py-stack-sm border-b border-outline-variant flex justify-between items-center bg-surface-code">
+<div class="font-label-mono text-label-mono text-deep-slate flex items-center gap-stack-sm">
+<span class="material-symbols-outlined text-sm">view_in_ar</span>
+                        ARENA_VIEW :: ACTIVE_SYNTHESIS
+                    </div>
+<div class="font-label-mono text-label-mono text-secondary px-stack-sm py-unit bg-surface-lab border border-outline-variant rounded-DEFAULT">
+                        ELAPSED: 04:12:09
+                    </div>
+</div>
+<div class="arena-container">
+<!-- Data Core (Center) -->
+<div class="relative z-10 w-24 h-24 rounded-full bg-surface-lab border-2 border-deep-slate flex items-center justify-center shadow-[0_0_20px_rgba(26,36,56,0.1)]">
+<span class="material-symbols-outlined text-4xl text-deep-slate animate-pulse">memory</span>
+<div class="absolute inset-0 rounded-full border border-accent-cyan pulse-ring"></div>
+</div>
+<!-- Connection Lines (SVG) -->
+<svg class="absolute inset-0 w-full h-full pointer-events-none" style="z-index: 0;">
+<!-- Agent 1 to Core -->
+<line stroke="#e0e2e7" stroke-width="1.5" x1="50%" x2="50%" y1="15%" y2="50%"></line>
+<!-- Agent 2 to Core (Active Speaking Line) -->
+<line class="data-stream" stroke="#00D1FF" stroke-width="2" x1="85%" x2="50%" y1="40%" y2="50%"></line>
+<!-- Agent 3 to Core -->
+<line stroke="#e0e2e7" stroke-width="1.5" x1="75%" x2="50%" y1="85%" y2="50%"></line>
+<!-- Agent 4 to Core -->
+<line stroke="#e0e2e7" stroke-width="1.5" x1="25%" x2="50%" y1="85%" y2="50%"></line>
+<!-- Agent 5 to Core -->
+<line stroke="#e0e2e7" stroke-width="1.5" x1="15%" x2="50%" y1="40%" y2="50%"></line>
+</svg>
+<!-- Agents -->
+<!-- Agent A -->
+<div class="agent-node agent-1 bg-surface-lab border border-outline-variant p-stack-sm rounded-lg flex items-center gap-stack-sm w-32 shadow-sm z-20">
+<div class="w-8 h-8 rounded-DEFAULT bg-surface-code flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-lg">smart_toy</span>
+</div>
+<div class="font-label-mono text-label-mono text-deep-slate">AGENT_A<br/><span class="text-secondary text-[9px]">IDLE</span></div>
+</div>
+<!-- Agent B (Active/Speaking) -->
+<div class="agent-node agent-2 z-30">
+<!-- Reasoning Bubble -->
+<div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-stack-sm w-48 bg-surface-lab border border-accent-cyan rounded-lg p-stack-sm shadow-[0_4px_15px_rgba(0,209,255,0.15)] opacity-100 transition-opacity">
+<div class="font-label-mono text-label-mono text-[11px] leading-tight text-deep-slate">
+<span class="text-primary-container font-bold">Asserting:</span> Node conflict detected in sub-routine 4. Recalculating vector...
+                            </div>
+<!-- Pointer -->
+<div class="absolute top-full left-1/2 transform -translate-x-1/2 -mt-[1px] w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[6px] border-t-accent-cyan"></div>
+<div class="absolute top-full left-1/2 transform -translate-x-1/2 -mt-[2px] w-0 h-0 border-l-[5px] border-l-transparent border-r-[5px] border-r-transparent border-t-[5px] border-t-surface-lab"></div>
+</div>
+<div class="bg-surface-lab border-2 border-accent-cyan p-stack-sm rounded-lg flex items-center gap-stack-sm w-32 shadow-[0_0_15px_rgba(0,209,255,0.3)] relative overflow-hidden">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-accent-cyan"></div>
+<div class="w-8 h-8 rounded-DEFAULT bg-primary-fixed flex items-center justify-center text-primary-container">
+<span class="material-symbols-outlined text-lg animate-bounce">graphic_eq</span>
+</div>
+<div class="font-label-mono text-label-mono text-deep-slate">AGENT_B<br/><span class="text-primary-container text-[9px] font-bold">SPEAKING</span></div>
+</div>
+</div>
+<!-- Agent C -->
+<div class="agent-node agent-3 bg-surface-lab border border-outline-variant p-stack-sm rounded-lg flex items-center gap-stack-sm w-32 shadow-sm z-20">
+<div class="w-8 h-8 rounded-DEFAULT bg-surface-code flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-lg">smart_toy</span>
+</div>
+<div class="font-label-mono text-label-mono text-deep-slate">AGENT_C<br/><span class="text-secondary text-[9px]">LISTENING</span></div>
+</div>
+<!-- Agent D -->
+<div class="agent-node agent-4 bg-surface-lab border border-outline-variant p-stack-sm rounded-lg flex items-center gap-stack-sm w-32 shadow-sm z-20">
+<div class="w-8 h-8 rounded-DEFAULT bg-surface-code flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-lg">smart_toy</span>
+</div>
+<div class="font-label-mono text-label-mono text-deep-slate">AGENT_D<br/><span class="text-secondary text-[9px]">COMPUTING</span></div>
+</div>
+<!-- Agent E -->
+<div class="agent-node agent-5 bg-surface-lab border border-outline-variant p-stack-sm rounded-lg flex items-center gap-stack-sm w-32 shadow-sm z-20">
+<div class="w-8 h-8 rounded-DEFAULT bg-surface-code flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-lg">smart_toy</span>
+</div>
+<div class="font-label-mono text-label-mono text-deep-slate">AGENT_E<br/><span class="text-secondary text-[9px]">IDLE</span></div>
+</div>
+</div>
+</section>
+<!-- Dual-Pane Workspace -->
+<section class="flex-1 grid grid-cols-12 gap-stack-lg min-h-[300px]">
+<!-- Claim Graph (Left Pane) -->
+<div class="col-span-12 md:col-span-7 bg-surface-lab border border-outline-variant rounded-lg flex flex-col overflow-hidden shadow-sm">
+<div class="px-stack-md py-stack-sm border-b border-outline-variant flex justify-between items-center bg-surface-code">
+<div class="font-label-mono text-label-mono text-deep-slate flex items-center gap-stack-sm">
+<span class="material-symbols-outlined text-sm">hub</span>
+                            CLAIM_GRAPH :: RUN_009
+                        </div>
+<button class="text-secondary hover:text-primary-container"><span class="material-symbols-outlined text-sm">fullscreen</span></button>
+</div>
+<div class="flex-1 p-stack-md bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjEiIGZpbGw9IiNFMEU4RkYiLz48L3N2Zz4=')] relative overflow-hidden">
+<!-- Graph Nodes -->
+<div class="absolute top-8 left-8 bg-surface-lab border border-outline-variant rounded-DEFAULT p-stack-sm shadow-sm w-48 z-10">
+<div class="font-label-mono text-[9px] text-secondary mb-1">NODE_ALPHA</div>
+<div class="font-body-md text-body-md text-deep-slate">Initial premise accepted.</div>
+</div>
+<div class="absolute top-24 left-64 bg-surface-lab border border-accent-cyan rounded-DEFAULT p-stack-sm shadow-sm w-56 z-10 relative overflow-hidden">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-accent-cyan"></div>
+<div class="font-label-mono text-[9px] text-primary-container font-bold mb-1 ml-1">NODE_BETA (ACTIVE)</div>
+<div class="font-body-md text-body-md text-deep-slate ml-1">Evaluating sub-routine 4 conflict.</div>
+</div>
+<div class="absolute top-48 left-16 bg-surface-code border border-outline-variant rounded-DEFAULT p-stack-sm w-40 z-10 opacity-70">
+<div class="font-label-mono text-[9px] text-secondary mb-1">NODE_GAMMA</div>
+<div class="font-body-md text-body-md text-secondary">Awaiting resolution.</div>
+</div>
+<!-- SVG Connectors for Graph -->
+<svg class="absolute inset-0 w-full h-full pointer-events-none">
+<path d="M 200 48 L 256 112" fill="none" stroke="#bfc8cd" stroke-dasharray="4 2" stroke-width="1.5"></path>
+<path d="M 104 72 L 128 192" fill="none" stroke="#bfc8cd" stroke-width="1.5"></path>
+</svg>
+</div>
+</div>
+<!-- Terminal Output (Right Pane) -->
+<div class="col-span-12 md:col-span-5 bg-surface-code border border-outline-variant rounded-lg flex flex-col overflow-hidden shadow-sm">
+<div class="px-stack-md py-stack-sm border-b border-outline-variant flex justify-between items-center bg-surface-lab">
+<div class="font-label-mono text-label-mono text-deep-slate flex items-center gap-stack-sm">
+<span class="material-symbols-outlined text-sm">terminal</span>
+                            TERMINAL_OUTPUT
+                        </div>
+<div class="flex gap-2">
+<div class="w-2 h-2 rounded-full bg-outline-variant"></div>
+<div class="w-2 h-2 rounded-full bg-outline-variant"></div>
+<div class="w-2 h-2 rounded-full bg-accent-cyan animate-pulse"></div>
+</div>
+</div>
+<div class="flex-1 p-stack-md font-label-mono text-sm text-terminal-text overflow-y-auto space-y-2">
+<div class="opacity-70">&gt; SYS: Initializing Arena Instance A-892...</div>
+<div class="opacity-70">&gt; SYS: Agents connected (5/5).</div>
+<div class="opacity-70">&gt; CORE: Distributing baseline logic vectors.</div>
+<div><span class="text-secondary">[AGENT_A]</span> Acknowledged baseline. Standby.</div>
+<div><span class="text-secondary">[AGENT_C]</span> Acknowledged baseline. Standby.</div>
+<div class="text-primary-container font-medium bg-primary-fixed/20 px-2 -mx-2 py-1 rounded">
+<span class="text-primary-container">[AGENT_B]</span> Asserting: Node conflict detected in sub-routine 4. Recalculating vector...
+                        </div>
+<div class="opacity-70 animate-pulse">&gt; SYS: Processing Agent B computation... _</div>
+</div>
+</div>
+</section>
+</main>
+</div>
+</body></html>
