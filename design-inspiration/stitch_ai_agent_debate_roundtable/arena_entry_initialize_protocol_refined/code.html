@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Initialize Arena Protocol</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+                "on-surface": "#181c20",
+                "on-secondary-fixed-variant": "#3d475d",
+                "on-secondary": "#ffffff",
+                "primary": "#004d60",
+                "tertiary-container": "#545e74",
+                "secondary-container": "#d8e2fe",
+                "on-tertiary-fixed": "#111b2e",
+                "surface-dim": "#d8dadf",
+                "on-tertiary-fixed-variant": "#3d475c",
+                "surface-container": "#eceef3",
+                "inverse-surface": "#2d3135",
+                "on-secondary-container": "#5a647c",
+                "surface-bright": "#f7f9fe",
+                "surface-container-lowest": "#ffffff",
+                "surface-lab": "#FFFFFF",
+                "on-primary-fixed-variant": "#004e60",
+                "secondary": "#545e75",
+                "background": "#f7f9fe",
+                "on-primary-fixed": "#001f28",
+                "surface-tint": "#00677f",
+                "tertiary": "#3c465b",
+                "surface-code": "#F1F4F9",
+                "inverse-primary": "#86d1ec",
+                "primary-container": "#00677f",
+                "primary-fixed": "#b6eaff",
+                "tertiary-fixed": "#d8e2fd",
+                "terminal-text": "#252F43",
+                "surface-container-highest": "#e0e2e7",
+                "surface-container-low": "#f1f4f9",
+                "secondary-fixed": "#d8e2fe",
+                "on-error-container": "#93000a",
+                "on-error": "#ffffff",
+                "inverse-on-surface": "#eff1f6",
+                "outline": "#6f787d",
+                "on-primary": "#ffffff",
+                "on-tertiary-container": "#ced8f2",
+                "on-primary-container": "#98e3ff",
+                "on-background": "#181c20",
+                "accent-cyan": "#00D1FF",
+                "surface-container-high": "#e6e8ed",
+                "deep-slate": "#1A2438",
+                "secondary-fixed-dim": "#bcc6e1",
+                "outline-variant": "#bfc8cd",
+                "on-tertiary": "#ffffff",
+                "surface": "#f7f9fe",
+                "on-secondary-fixed": "#111b2f",
+                "error": "#ba1a1a",
+                "primary-fixed-dim": "#86d1ec",
+                "tertiary-fixed-dim": "#bcc6e0",
+                "error-container": "#ffdad6",
+                "surface-variant": "#e0e2e7",
+                "on-surface-variant": "#3f484c"
+        },
+        "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+        },
+        "spacing": {
+                "margin-mobile": "16px",
+                "stack-lg": "24px",
+                "stack-md": "16px",
+                "panel-width-side": "360px",
+                "margin-desktop": "32px",
+                "stack-sm": "8px",
+                "unit": "4px",
+                "gutter": "16px"
+        },
+        "fontFamily": {
+                "headline-md": [
+                        "Inter"
+                ],
+                "headline-lg-mobile": [
+                        "Inter"
+                ],
+                "body-lg": [
+                        "Inter"
+                ],
+                "headline-lg": [
+                        "Inter"
+                ],
+                "body-md": [
+                        "Inter"
+                ],
+                "display-lg": [
+                        "Inter"
+                ],
+                "label-mono": [
+                        "JetBrains Mono"
+                ]
+        },
+        "fontSize": {
+                "headline-md": [
+                        "24px",
+                        {
+                                "lineHeight": "32px",
+                                "letterSpacing": "-0.01em",
+                                "fontWeight": "600"
+                        }
+                ],
+                "headline-lg-mobile": [
+                        "28px",
+                        {
+                                "lineHeight": "34px",
+                                "fontWeight": "700"
+                        }
+                ],
+                "body-lg": [
+                        "18px",
+                        {
+                                "lineHeight": "28px",
+                                "fontWeight": "400"
+                        }
+                ],
+                "headline-lg": [
+                        "32px",
+                        {
+                                "lineHeight": "40px",
+                                "letterSpacing": "-0.01em",
+                                "fontWeight": "700"
+                        }
+                ],
+                "body-md": [
+                        "16px",
+                        {
+                                "lineHeight": "24px",
+                                "fontWeight": "400"
+                        }
+                ],
+                "display-lg": [
+                        "48px",
+                        {
+                                "lineHeight": "56px",
+                                "letterSpacing": "-0.02em",
+                                "fontWeight": "700"
+                        }
+                ],
+                "label-mono": [
+                        "12px",
+                        {
+                                "lineHeight": "16px",
+                                "letterSpacing": "0.05em",
+                                "fontWeight": "500"
+                        }
+                ]
+        }
+},
+    },
+  }
+</script>
+<style>
+        .glow-cyan {
+            text-shadow: 0 0 10px rgba(0, 209, 255, 0.5), 0 0 20px rgba(0, 209, 255, 0.3);
+        }
+        .input-glow:focus {
+            box-shadow: 0 0 0 2px rgba(0, 209, 255, 0.2);
+            border-color: #00D1FF;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface min-h-screen flex flex-col font-body-md">
+<!-- TopNavBar -->
+<header class="bg-surface-lab border-b border-outline-variant flex justify-between items-center w-full px-gutter max-w-[1280px] mx-auto h-16 sticky top-0 z-50">
+<div class="flex items-center gap-stack-lg">
+<span class="font-headline-md text-headline-md font-bold text-deep-slate">ARENA</span>
+<nav class="hidden md:flex gap-stack-md">
+<a class="font-label-mono text-label-mono text-primary border-b-2 border-primary pb-1 transition-colors duration-200 ease-in-out hover:text-primary uppercase" href="#">ARENA</a>
+<a class="font-label-mono text-label-mono text-secondary transition-colors duration-200 ease-in-out hover:text-primary uppercase" href="#">LOGIC_GRAPH</a>
+<a class="font-label-mono text-label-mono text-secondary transition-colors duration-200 ease-in-out hover:text-primary uppercase" href="#">TERMINAL</a>
+<a class="font-label-mono text-label-mono text-secondary transition-colors duration-200 ease-in-out hover:text-primary uppercase" href="#">ARCHIVE</a>
+</nav>
+</div>
+<div class="flex items-center gap-stack-sm text-secondary">
+<button class="hover:text-primary transition-colors duration-200"><span class="material-symbols-outlined">settings</span></button>
+<button class="hover:text-primary transition-colors duration-200"><span class="material-symbols-outlined">notifications</span></button>
+<div class="w-8 h-8 rounded-full bg-surface-variant overflow-hidden ml-stack-sm border border-outline-variant">
+<img alt="User Lab Profile" class="w-full h-full object-cover" data-alt="A macro shot of a sleek, modern digital profile avatar icon in a light-mode sterile lab environment. The avatar should be minimalist, composed of sharp geometric lines and smooth curves, predominantly in deep slate and crisp white. Subtle hints of glowing cyan highlight the edges, creating a technical, high-precision aesthetic suitable for a professional logic arena interface." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA2L8B54ILLwh9MpeNHsvZ75FOYExNsQ3Dgsze7P9wX7pW4Lg6Qhzp0OOFvZkRRUN90dLfX1KLliwJSQpMHEQOZ44rgHJxVM5BA_O0g_1qD0RpEG4vBrHQobpCKD3wY_QIomNOb-oPA3QkMbDFvrwap2SMd4cdFXmS6KPwLqYDjotzJKs24-TNoQSHJ2G1QSdmAOrr3r9PTjzXGqq2hhYPjZTSV7r3RrLgOfyNKFzFDs0Eld6hHCReO"/>
+</div>
+</div>
+</header>
+<main class="flex-1 w-full max-w-[1280px] mx-auto px-gutter py-[48px] flex flex-col items-center">
+<div class="w-full max-w-3xl text-center mb-stack-lg">
+<h1 class="font-display-lg text-display-lg text-deep-slate glow-cyan mb-stack-sm uppercase tracking-tight">INITIALIZE ARENA PROTOCOL</h1>
+<p class="text-secondary font-label-mono text-label-mono">Awaiting conflict parameters. Define the logical bounds below.</p>
+</div>
+<div class="w-full max-w-2xl bg-surface-code rounded-lg p-stack-md border border-outline-variant mb-[48px] shadow-sm relative">
+<div class="absolute top-0 left-0 h-full w-1 bg-accent-cyan rounded-l-lg"></div>
+<div class="flex items-center gap-stack-sm mb-stack-sm text-secondary">
+<span class="material-symbols-outlined text-sm">terminal</span>
+<span class="font-label-mono text-label-mono uppercase">SYS.PROMPT_ENTRY</span>
+</div>
+<textarea class="w-full bg-surface-lab border border-outline-variant rounded-lg p-stack-sm font-label-mono text-label-mono text-terminal-text input-glow focus:outline-none resize-none" placeholder="&gt; Input conflict scenario..." rows="3"></textarea>
+<div class="flex justify-end mt-stack-md">
+<button class="bg-accent-cyan text-deep-slate font-label-mono text-label-mono px-stack-md py-stack-sm rounded-lg hover:bg-primary-fixed transition-colors flex items-center gap-unit uppercase">
+                     EXECUTE <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+<div class="w-full max-w-5xl">
+<h2 class="font-label-mono text-label-mono text-secondary mb-stack-md border-b border-outline-variant pb-unit uppercase">SAMPLE BATTLES</h2>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-stack-lg">
+<!-- Card 1 -->
+<div class="bg-surface-lab rounded-lg border border-outline-variant p-stack-md relative hover:border-accent-cyan transition-colors cursor-pointer group shadow-sm flex flex-col h-full">
+<div class="absolute left-0 top-stack-md bottom-stack-md w-0.5 bg-outline-variant group-hover:bg-accent-cyan transition-colors"></div>
+<div class="flex justify-between items-start mb-stack-sm pl-stack-sm">
+<span class="bg-surface-container-low text-deep-slate font-label-mono text-[10px] px-2 py-0.5 rounded-lg border border-outline-variant uppercase">AGI_SAFETY</span>
+<span class="material-symbols-outlined text-secondary group-hover:text-accent-cyan transition-colors text-sm">psychology</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-deep-slate mb-unit pl-stack-sm">Alignment Optimization</h3>
+<p class="text-secondary font-body-md text-body-md mb-stack-md pl-stack-sm flex-1">Evaluate divergent reward functions in multi-agent environments to prevent instrumental convergence.</p>
+<div class="pl-stack-sm">
+<span class="text-accent-cyan font-label-mono text-label-mono flex items-center gap-unit uppercase">LOAD <span class="material-symbols-outlined text-[12px]">download</span></span>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface-lab rounded-lg border border-outline-variant p-stack-md relative hover:border-accent-cyan transition-colors cursor-pointer group shadow-sm flex flex-col h-full">
+<div class="absolute left-0 top-stack-md bottom-stack-md w-0.5 bg-outline-variant group-hover:bg-accent-cyan transition-colors"></div>
+<div class="flex justify-between items-start mb-stack-sm pl-stack-sm">
+<span class="bg-surface-container-low text-deep-slate font-label-mono text-[10px] px-2 py-0.5 rounded-lg border border-outline-variant uppercase">MARS_TRANSIT</span>
+<span class="material-symbols-outlined text-secondary group-hover:text-accent-cyan transition-colors text-sm">rocket_launch</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-deep-slate mb-unit pl-stack-sm">Orbital Trajectory Conflict</h3>
+<p class="text-secondary font-body-md text-body-md mb-stack-md pl-stack-sm flex-1">Resolve resource allocation disputes between automated transport vessels during Hohmann transfer phases.</p>
+<div class="pl-stack-sm">
+<span class="text-accent-cyan font-label-mono text-label-mono flex items-center gap-unit uppercase">LOAD <span class="material-symbols-outlined text-[12px]">download</span></span>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-surface-lab rounded-lg border border-outline-variant p-stack-md relative hover:border-accent-cyan transition-colors cursor-pointer group shadow-sm flex flex-col h-full">
+<div class="absolute left-0 top-stack-md bottom-stack-md w-0.5 bg-outline-variant group-hover:bg-accent-cyan transition-colors"></div>
+<div class="flex justify-between items-start mb-stack-sm pl-stack-sm">
+<span class="bg-surface-container-low text-deep-slate font-label-mono text-[10px] px-2 py-0.5 rounded-lg border border-outline-variant uppercase">ECON_CONSENSUS</span>
+<span class="material-symbols-outlined text-secondary group-hover:text-accent-cyan transition-colors text-sm">account_balance</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-deep-slate mb-unit pl-stack-sm">Distributed Ledger Split</h3>
+<p class="text-secondary font-body-md text-body-md mb-stack-md pl-stack-sm flex-1">Simulate Byzantine fault tolerance failure modes in global high-frequency trading networks.</p>
+<div class="pl-stack-sm">
+<span class="text-accent-cyan font-label-mono text-label-mono flex items-center gap-unit uppercase">LOAD <span class="material-symbols-outlined text-[12px]">download</span></span>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>
